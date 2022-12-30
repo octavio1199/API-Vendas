@@ -3,18 +3,14 @@ import { getCustomRepository } from 'typeorm';
 import Product from '../typeorm/entities/Product';
 import { ProductsRepository } from '../typeorm/repositories/ProductRepository';
 
-interface CreateProductDTO {
+interface IRequest {
   name: string;
   price: number;
   quantity: number;
 }
 
 class CreateProductService {
-  public async execute({
-    name,
-    price,
-    quantity,
-  }: CreateProductDTO): Promise<Product> {
+  public async execute({ name, price, quantity }: IRequest): Promise<Product> {
     const productsRepository = getCustomRepository(ProductsRepository);
     const findProduct = await productsRepository.findByName(name);
     if (findProduct) {
