@@ -17,7 +17,7 @@ export default function isAuthenticated(
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
-    throw new Error('JWT token is missing');
+    throw new AppError('Unauthorized: JWT token is missing');
   }
 
   const [, token] = authHeader.split(' ');
