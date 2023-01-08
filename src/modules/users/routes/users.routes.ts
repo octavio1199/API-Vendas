@@ -14,16 +14,6 @@ const upload = multer(uploadConfig);
 
 usersRouter.get('/', isAuthenticated, usersController.index);
 
-usersRouter.get(
-  '/:id',
-  celebrate({
-    [Segments.PARAMS]: {
-      id: Joi.string().uuid().required(),
-    },
-  }),
-  usersController.show,
-);
-
 usersRouter.post(
   '/',
   celebrate({
@@ -41,18 +31,6 @@ usersRouter.patch(
   isAuthenticated,
   upload.single('avatar'),
   usersAvatarController.update,
-);
-
-usersRouter.put(
-  '/:id',
-  celebrate({
-    [Segments.BODY]: {
-      name: Joi.string().required(),
-      price: Joi.number().precision(2).required(),
-      quantity: Joi.number().required(),
-    },
-  }),
-  usersController.update,
 );
 
 usersRouter.delete(
