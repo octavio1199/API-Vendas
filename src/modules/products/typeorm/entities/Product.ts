@@ -13,9 +13,7 @@ class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => OrdersProducts, orderProducts => orderProducts.product, {
-    cascade: true,
-  })
+  @OneToMany(() => OrdersProducts, order_products => order_products.product)
   order_products: OrdersProducts[];
 
   @Column()

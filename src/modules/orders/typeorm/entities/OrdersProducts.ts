@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import Order from './Order';
 
-@Entity('orders')
+@Entity('orders_products')
 export default class OrdersProducts {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -19,9 +19,15 @@ export default class OrdersProducts {
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
+  @Column('order_id')
+  order_id: string;
+
   @ManyToOne(() => Product, product => product.order_products)
   @JoinColumn({ name: 'product_id' })
   product: Product;
+
+  @Column('product_id')
+  product_id: string;
 
   @Column('decimal')
   price: number;
