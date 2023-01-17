@@ -1,5 +1,7 @@
 import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
 import { getCustomRepository } from 'typeorm';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
 import Customer from '../infra/typeorm/entities/Customer';
 import { CustomersRepository } from '../infra/typeorm/repositories/CustomersRepository';
 
@@ -9,16 +11,20 @@ interface IRequest {
   email: string;
 }
 
+@injectable()
 class UpdateCustomerService {
-  public async execute({ id, name, email }: IRequest): Promise<Customer> {
-    const customersRepository = getCustomRepository(CustomersRepository);
+  constructor(
+    @inject('CustomersRepository')
+    private readonly customersRepository: ICustomersRepository,
+  ) {}
 
-    const customer = await customersRepository.findOne(id);
+  public async execute({ id, name, email }: IRequest): Promise<Customer> {
+    const customer = await this.customersRepository.findById(id);
     if (!customer) {
       throw new AppError('Customer not found', 400);
     }
 
-    const customerExists = await customersRepository.findByEmail(email);
+    const customerExists = await this.customersRepository.findByEmail(email);
 
     if (customerExists && customerExists.id !== customer.id) {
       if (customerExists) {
@@ -29,7 +35,7 @@ class UpdateCustomerService {
     customer.name = name;
     customer.email = email;
 
-    await customersRepository.save(customer);
+    await this.customersRepository.save(customer);
 
     return customer;
   }
