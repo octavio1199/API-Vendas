@@ -3,7 +3,7 @@ import { ICustomersRepository } from '@modules/customers/domain/repositories/ICu
 import { getRepository, Repository } from 'typeorm';
 import Customer from '../entities/Customer';
 
-export class CustomersRepository implements CustomersRepository {
+export class CustomersRepository implements ICustomersRepository {
   private ormRepository: Repository<Customer>;
 
   constructor() {
@@ -25,6 +25,11 @@ export class CustomersRepository implements CustomersRepository {
     return customer;
   }
 
+  async findAll(): Promise<Customer[]> {
+    const customers = this.ormRepository.find();
+    return customers;
+  }
+
   async create({ name, email }: ICreateCustomer): Promise<Customer> {
     const customer = this.ormRepository.create({ name, email });
 
@@ -35,5 +40,9 @@ export class CustomersRepository implements CustomersRepository {
   async save(customer: Customer): Promise<Customer> {
     await this.ormRepository.save(customer);
     return customer;
+  }
+
+  async remove(customer: Customer): Promise<void> {
+    await this.ormRepository.remove(customer);
   }
 }
