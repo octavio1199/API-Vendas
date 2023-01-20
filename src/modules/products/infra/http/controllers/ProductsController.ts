@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 import CreateProductService from '../../../services/CreateProductService';
 import DeleteProductService from '../../../services/DeleteProductService';
 import ListProductService from '../../../services/ListProductService';
@@ -7,7 +8,7 @@ import UpdateProductService from '../../../services/UpdateProductService';
 
 export default class ProductsController {
   async index(req: Request, response: Response): Promise<Response> {
-    const listProducts = new ListProductService();
+    const listProducts = container.resolve(ListProductService);
 
     const products = await listProducts.execute();
     return response.json(products).status(200);
@@ -16,7 +17,7 @@ export default class ProductsController {
   async show(req: Request, response: Response): Promise<Response> {
     const { id } = req.params;
 
-    const showProducts = new ShowProductService();
+    const showProducts = container.resolve(ShowProductService);
 
     const product = await showProducts.execute({ id });
 
@@ -26,7 +27,7 @@ export default class ProductsController {
   async create(req: Request, response: Response): Promise<Response> {
     const { name, price, quantity } = req.body;
 
-    const createProduct = new CreateProductService();
+    const createProduct = container.resolve(CreateProductService);
 
     const product = await createProduct.execute({
       name,
@@ -41,7 +42,7 @@ export default class ProductsController {
     const { id } = req.params;
     const { name, price, quantity } = req.body;
 
-    const updateProduct = new UpdateProductService();
+    const updateProduct = container.resolve(UpdateProductService);
 
     const product = await updateProduct.execute({
       id,
@@ -56,7 +57,7 @@ export default class ProductsController {
   async delete(req: Request, response: Response): Promise<Response> {
     const { id } = req.params;
 
-    const deleteProduct = new DeleteProductService();
+    const deleteProduct = container.resolve(DeleteProductService);
 
     await deleteProduct.execute({ id });
 
