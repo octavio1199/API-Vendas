@@ -1,3 +1,4 @@
+import { IUser } from '@modules/users/domain/models/IUser';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +9,7 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 
 @Entity('users')
-class User {
+class User implements IUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
